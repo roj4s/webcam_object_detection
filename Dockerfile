@@ -36,7 +36,8 @@ RUN conda env create -f /opt/requirements.yml
 
 RUN mkdir /opt/app
 COPY nn /opt/app/nn
-COPY main.py /opt/app
+COPY detector.py /opt/app
+COPY webcam_detection.py /opt/app
 
 WORKDIR /opt/app
 
