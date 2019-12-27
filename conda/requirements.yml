@@ -1,4 +1,4 @@
-name: darknet_usecase
+name: app
 channels:
 - defaults
 dependencies:
