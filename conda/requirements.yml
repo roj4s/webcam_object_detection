@@ -1,0 +1,18 @@
+name: darknet_usecase
+channels:
+- defaults
+dependencies:
+- pip=19.3.1=py37_0
+- python=3.7.0
+- pip:
+    #    - matplotlib
+    - opencv-python
+      #- pandas
+      #- numpy
+      #- absl-py
+      #- scikit-image
+      #- tqdm
+      #- modin[ray]
+      #- psutil
+      #- ipykernel
+      #- jupyter
