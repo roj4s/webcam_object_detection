@@ -40,8 +40,10 @@ COPY detector.py /opt/app
 COPY webcam_detection.py /opt/app
 
 WORKDIR /opt/app
+ENV DISPLAY :0
+ENV QT_X11_NO_MITSHM 1
 
 CMD /bin/bash
 
 #Run it like this:
-#sudo docker run --gpus all
+#docker run -v /tmp/.X11-unix/:/tmp/.X11-unix/ --device /dev/video0:/dev/video0 --gpus all -it roj4s/darknet
