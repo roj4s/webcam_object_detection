@@ -18,9 +18,16 @@ class Detector:
             3)
 
     def detect(self, frame, thresh=0.5):
+        fw = frame.shape[1]
+        fh = frame.shape[0]
+        nw = darknet.network_width(self.net_main)
+        nh = darknet.network_height(self.net_main)
+        w_scale = nw/fw
+        h_scale = nh/fh
+
         frame_resized = cv2.resize(frame,
-                                   (darknet.network_width(self.net_main),
-                                    darknet.network_height(self.net_main)),
+                                   (nw,
+                                    nh),
                                    interpolation=cv2.INTER_LINEAR)
 
         darknet.copy_image_from_bytes(
@@ -29,4 +36,4 @@ class Detector:
         nn_detections = darknet.detect_image(
             self.net_main, self.meta_main, self.darknet_image, thresh)
 
-        return nn_detections
+        return nn_detections, w_scale, h_scale
