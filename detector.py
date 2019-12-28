@@ -3,14 +3,16 @@ import cv2
 
 class Detection:
 
-    def __init__(self, darknet_detection_output):
+    def __init__(self, darknet_detection_output, w_scale, h_scale):
+        self.w_scale = w_scale
+        self.h_scale = h_scale
         self.darknet_detection_output = darknet_detection_output
-        self.label = darknet_detection_output[0]
+        self.label = darknet_detection_output[0].decode('utf-8')
         self.confidence = darknet_detection_output[1]
-        self.x = darknet_detection_output[2][0]
-        self.y = darknet_detection_output[2][1]
-        self.w = darknet_detection_output[2][2]
-        self.h = darknet_detection_output[2][3]
+        self.x = darknet_detection_output[2][0] * w_scale
+        self.y = darknet_detection_output[2][1] * h_scale
+        self.w = darknet_detection_output[2][2] * w_scale
+        self.h = darknet_detection_output[2][3] * h_scale
 
     def __str__(self):
         return str(self.__dict__)
@@ -40,8 +42,8 @@ class Detector:
         fh = frame.shape[0]
         nw = darknet.network_width(self.net_main)
         nh = darknet.network_height(self.net_main)
-        w_scale = nw/fw
-        h_scale = nh/fh
+        w_scale = fw/nw
+        h_scale = fh/nh
 
         frame_resized = cv2.resize(frame,
                                    (nw,
@@ -54,6 +56,6 @@ class Detector:
         nn_detections = darknet.detect_image(
             self.net_main, self.meta_main, self.darknet_image, thresh)
 
-        detections = [Detection(d) for d in nn_detections]
+        detections = [Detection(d, w_scale, h_scale) for d in nn_detections]
 
-        return detections, w_scale, h_scale
+        return detections
