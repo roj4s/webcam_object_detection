@@ -1,6 +1,24 @@
 import nn.DarknetFrame as darknet
 import cv2
 
+class Detection:
+
+    def __init__(self, darknet_detection_output):
+        self.darknet_detection_output = darknet_detection_output
+        self.label = darknet_detection_output[0]
+        self.confidence = darknet_detection_output[1]
+        self.x = darknet_detection_output[2][0]
+        self.y = darknet_detection_output[2][1]
+        self.w = darknet_detection_output[2][2]
+        self.h = darknet_detection_output[2][3]
+
+    def __str__(self):
+        return str(self.__dict__)
+
+    def as_json(self):
+        return self.__dict__
+
+
 class Detector:
 
     def __init__(self, config_file='nn/configs/yolov3-tiny.cfg',
@@ -36,4 +54,6 @@ class Detector:
         nn_detections = darknet.detect_image(
             self.net_main, self.meta_main, self.darknet_image, thresh)
 
-        return nn_detections, w_scale, h_scale
+        detections = [Detection(d) for d in nn_detections]
+
+        return detections, w_scale, h_scale
