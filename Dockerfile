@@ -17,7 +17,7 @@ RUN apt-get update && \
     #wget gcc g++ make cmake libglib2.0-0 libxext6 libxrender-dev
     libopencv-highgui-dev \
         # bzip2 libopenblas-dev pbzip2 libgl1-mesa-glx && \
-            && apt-get clean\
+            && apt-get clean \
                && rm -rf /var/lib/apt/lists/*
 
 # CONDA INSTALLATION
@@ -38,12 +38,14 @@ RUN mkdir /opt/app
 COPY nn /opt/app/nn
 COPY detector.py /opt/app
 COPY webcam_detection.py /opt/app
+COPY ./conda/entrypoint.sh /opt/app
+RUN chmod +x /opt/app/entrypoint.sh
 
-WORKDIR /opt/app
 ENV DISPLAY :0
 ENV QT_X11_NO_MITSHM 1
 
-CMD /bin/bash
+WORKDIR /opt/app
+CMD '/opt/app/entrypoint.sh'
 
 #Run it like this:
 #docker run -v /tmp/.X11-unix/:/tmp/.X11-unix/ --device /dev/video0:/dev/video0 --gpus all -it roj4s/darknet
